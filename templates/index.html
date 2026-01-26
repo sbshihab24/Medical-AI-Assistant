@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediConsult Elite | AI Medical Assistant</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Marked.js for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans antialiased h-screen flex overflow-hidden">
+
+    <!-- Sidebar (History) -->
+    <aside
+        class="w-80 bg-white border-r border-slate-200 hidden md:flex flex-col z-10 shadow-sm transition-all duration-300 transform"
+        id="sidebar">
+        <div class="p-6 border-b border-slate-100 flex flex-col items-center text-center gap-3">
+            <div
+                class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-200 mb-2">
+                <i class="fa-solid fa-stethoscope text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-xl tracking-tight text-slate-900 uppercase">MediConsult <span
+                        class="text-blue-600">Elite</span></h1>
+                <p class="text-xs text-blue-500 font-bold tracking-widest uppercase mt-1">Senior Medical AI</p>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4">
+            <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 px-2">Current Session</h3>
+            <div id="session-history" class="space-y-2">
+                <!-- Session items will be dynamically added here -->
+                <div
+                    class="p-3 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium border border-blue-100 cursor-default">
+                    <i class="fa-regular fa-comments mr-2"></i> Active Consultation
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <button onclick="startNewSession()"
+                class="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-base font-medium rounded-lg transition-colors shadow-md">
+                <i class="fa-solid fa-plus"></i> New Consultation
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="flex-1 flex flex-col h-full relative">
+        <!-- Sticky Main Header (Centered) -->
+        <div class="app-header hidden md:flex">
+            <h1>MediConsult <span class="text-blue-600">Elite</span></h1>
+        </div>
+
+        <!-- Header (Mobile Only) -->
+        <header
+            class="md:hidden h-16 bg-white border-b border-slate-100 flex items-center px-4 justify-between z-20 shadow-sm">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <i class="fa-solid fa-stethoscope text-sm"></i>
+                </div>
+                <span class="font-bold text-slate-800 uppercase tracking-tight">MediConsult Elite</span>
+            </div>
+            <button class="text-slate-500 hover:text-slate-800" onclick="startNewSession()">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </header>
+
+        <!-- Messages Container -->
+        <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth pb-32">
+            <!-- Welcome Message -->
+            <div class="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-100 transition-opacity duration-500"
+                id="welcome-screen">
+                <div
+                    class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-sm mb-2">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">How can I assist you today?</h2>
+                <p class="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed">I can analyze lab reports, explain
+                    prescriptions, or discuss
+                    symptoms with medical rigor.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg w-full mt-6">
+                    <button onclick="setPrompt('Analyze this blood test report')"
+                        class="p-4 bg-white border border-slate-200 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all text-base font-semibold text-slate-700 text-left flex items-center gap-4 group">
+                        <i
+                            class="fa-solid fa-file-medical text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
+                        Analyze Lab Report
+                    </button>
+                    <button onclick="setPrompt('Explain the side effects of Metformin')"
+                        class="p-4 bg-white border border-slate-200 rounded-2xl hover:border-blue-400 hover:shadow-lg transition-all text-base font-semibold text-slate-700 text-left flex items-center gap-4 group">
+                        <i
+                            class="fa-solid fa-pills text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
+                        Check Medication
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Messages will appear here -->
+        </div>
+
+        <!-- Input Area -->
+        <div
+            class="absolute bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 md:p-6 z-30">
+            <div class="max-w-4xl mx-auto space-y-2">
+                <!-- File Preview -->
+                <div id="file-preview-area"
+                    class="hidden mb-2 p-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between w-fit max-w-xs">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <div
+                            class="w-8 h-8 bg-blue-100 rounded flex items-center justify-center text-blue-600 flex-shrink-0">
+                            <i class="fa-solid fa-file-image"></i>
+                        </div>
+                        <span class="text-xs text-slate-600 truncate font-medium"
+                            id="preview-filename">report.jpg</span>
+                    </div>
+                    <button onclick="clearFile()" class="ml-2 text-slate-400 hover:text-red-500 p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div
+                    class="relative flex items-end gap-2 bg-white rounded-2xl border border-slate-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all shadow-sm p-2">
+
+                    <!-- File Upload Button & Input -->
+                    <input type="file" id="file-upload" class="hidden" accept=".jpg,.jpeg,.png,.pdf"
+                        onchange="handleFileSelect(this)">
+                    <button onclick="document.getElementById('file-upload').click()"
+                        class="h-10 w-10 flex items-center justify-center rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        title="Upload Medical Report">
+                        <i class="fa-solid fa-paperclip text-lg"></i>
+                    </button>
+
+                    <!-- Text Area -->
+                    <textarea id="user-input" rows="1"
+                        class="w-full bg-transparent border-0 focus:ring-0 text-slate-800 placeholder-slate-400 resize-none py-2.5 max-h-32 text-base"
+                        placeholder="Describe symptoms or ask about a report..." oninput="autoResize(this)"
+                        onkeydown="checkSubmit(event)"></textarea>
+
+                    <!-- Send Button -->
+                    <button id="send-btn" onclick="sendMessage()"
+                        class="h-10 w-10 flex items-center justify-center rounded-xl bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md shadow-blue-600/20">
+                        <i class="fa-solid fa-paper-plane text-sm"></i>
+                    </button>
+                </div>
+
+                <p class="text-xs text-center text-slate-400">
+                    <span class="font-bold text-slate-500">NOTICE:</span> This AI provides general information only. It
+                    is not a substitute for professional medical advice. Call emergency services for urgent conditions.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/script.js"></script>
+</body>
+
+</html>

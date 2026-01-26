@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --medical-blue: #2563EB;
+    --clinic-white: #F8FAFC;
+    --text-primary: #1E293B;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8FAFC;
+}
+
+/* Premium Main Header (Centered) */
+.app-header {
+    height: 70px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.app-header h1 {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #0F172A;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* Markdown Styles in Chat - MORE LARGE */
+.prose {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: #1E293B;
+}
+
+.prose h1,
+.prose h2,
+.prose h3 {
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #0F172A;
+}
+
+.prose p {
+    margin-bottom: 1.25rem;
+}
+
+.prose strong {
+    font-weight: 700;
+    color: #0F172A;
+}
+
+/* Table Styling for Lab Reports - LARGE & CLEAR */
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 1.15rem;
+    border: 1px solid #E2E8F0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: white;
+}
+
+.prose th {
+    background-color: #F8FAFC;
+    font-weight: 700;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid #E2E8F0;
+}
+
+.prose td {
+    padding: 1rem;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+/* Chat Layout & Bubbles */
+#chat-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-msg,
+.bot-msg {
+    max-width: 80%;
+    margin-bottom: 2rem;
+    padding: 1.25rem 1.75rem;
+    position: relative;
+    clear: both;
+}
+
+.user-msg {
+    float: right;
+    align-self: flex-end;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: white;
+    border-radius: 1.5rem 1.5rem 0.25rem 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    font-weight: 500;
+}
+
+.bot-msg {
+    float: left;
+    align-self: flex-start;
+    background: white;
+    border: 1px solid #E2E8F0;
+    color: #0F172A;
+    border-radius: 1.5rem 1.5rem 1.5rem 0.25rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+/* Typing Indicator */
+.typing-dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #3B82F6;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+    margin: 0 2px;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typing {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* Hide header on desktop */
+@media (min-width: 768px) {
+    header {
+        display: none;
+    }
+}
